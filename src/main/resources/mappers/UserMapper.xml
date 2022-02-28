@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shed.mapper.UserMapper">
+
+
+    <resultMap id="userMap" type="user">
+        <id column="uid" property="uid"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="password" property="password"/>
+        <!--使用collection标签进行多对多查询-->
+        <collection property="roleList" ofType="com.shed.domain.Role">
+            <result column="rid" property="rid"/>
+            <result column="roleName" property="roleName"/>
+            <result column="introduction" property="introduction"/>
+        </collection>
+    </resultMap>
+
+    <!--多对多查询需要一张中间表,如user_role,其中设置了uid和rid作为外键关联user表的uid以及role表的rid-->
+    <select id="selectUsersAndRoles" resultMap="userMap">
+        SELECT * FROM test.t_user u, test.t_role r, test.t_user_role ur WHERE u.uid=ur.uid AND ur.rid=r.rid;
+    </select>
+
+</mapper>

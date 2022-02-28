@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shed.mapper.MemberMapper">
+
+    <!--使用resultMap
+        手动指定数据表字段与实体属性的映射关系
+        column: 数据表的字段名称
+        property: 实体的成员属性名称
+          -->
+    <!--一对多查询-->
+    <resultMap id="memberMap" type="member">
+        <id column="mid" property="mid"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="birthday" property="birthday"/>
+        <!--使用collection标签进行一对多查询-->
+        <collection property="orderList" ofType="com.shed.domain.Order">
+            <result column="oid" property="oid"/>
+            <result column="ordertime" property="ordertime"/>
+            <result column="total" property="total"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectMemberAndOrders" resultMap="memberMap">
+        SELECT * FROM test.t_member m LEFT JOIN test.t_order o ON m.mid=o.mid;
+    </select>
+
+</mapper>
